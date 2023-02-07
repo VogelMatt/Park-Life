@@ -1,32 +1,45 @@
 import { useState } from "react"
-// import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+
 
 export const NewParkForm = () => {
 
     const [userData, update] = useState({
         name: "",
-        email: ""
+        location: "",
+        basketballCourt: false,
+        tennisCourt: false,
+        volleyballCourt: false,
+        playground: false,
+        soccerField: false,
+        swingSet: false,
+        parkingLot: false,
+        imageUrl: ''
+
     })
 
-    // const navigate = useNavigate();
-    // const localKandyUser = localStorage.getItem("kandy_user")
-    // const kandyUserObject = JSON.parse(localKandyUser)
+    const navigate = useNavigate()
+    const localParkUser = localStorage.getItem("parklife_user")
+    const parkUserObject = JSON.parse(localParkUser)
 
     const handleSaveButtonClick = (event) => {
         event.preventDefault()
 
-
+        const newPark = {...userData};
+        const userId = parkUserObject.id
+        newPark.userId = userId
+        
 
         return fetch(`http://localhost:8088/parks`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(newPark)
         })
             .then(res => res.json())
             .then((data) => {
-                console.log(data)
+                navigate('/user-parks')
             })
     }
 
@@ -38,10 +51,11 @@ export const NewParkForm = () => {
                 <div className="form-group">
                     <label htmlFor="name">Name:</label>
                     <input
-                        required autoFocus
+                        required
                         type="text"
+                        id="parkName"
                         className="form-control"
-                        placeholder="Name of product"
+                        placeholder="Name of park"
                         value={userData.name}
                         onChange={
                             (event) => {
@@ -54,33 +68,165 @@ export const NewParkForm = () => {
             </fieldset>
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="type">Type:</label>
+                    <label htmlFor="address">Address</label>
                     <input
-                        type="text"
+                        required type="text"
+                        id="parkAddress"
                         className="form-control"
-                        placeholder="Email"
-                        value={userData.email}
+                        placeholder="Park address"
+                        value={userData.location}
                         onChange={
                             (event) => {
                                 const copy = { ...userData }
-                                copy.email = event.target.value
+                                copy.location = event.target.value
                                 update(copy)
                             }
                         }>
                     </input>
                 </div>
-                <div class="checkbox-wrapper-5">
-                    <div class="check">
+                <fieldset>
+                    <div className="form-group">
+                        <label htmlFor="imgUrl">Image URL: </label>
                         <input
-                            id="check-5"
-                            type="checkbox"
+                            required
+                            type="text"
+                            id="imgUrl"
                             className="form-control"
-                            placeholder="Basketball"
-                            value={userData.email}
+                            placeholder="example.com"
+                            value={userData.imageUrl}
+                            onChange={(event) => {
+                                const copy = { ...userData }
+                                copy.imageUrl = event.target.value
+                                update(copy)
+                            }}
+                        />
+                    </div>
+                </fieldset>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Basketball</label>
+                        <input
+                            id="checkBasketball"
+                            type="checkbox"
+                            value={userData.basketballCourt}
                             onChange={
                                 (event) => {
                                     const copy = { ...userData }
-                                    copy.email = event.target.value
+                                    copy.basketballCourt = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Tennis</label>
+                        <input
+                            id="CheckTennis"
+                            type="checkbox"
+                            label="Tennis"
+                            value={userData.tennisCourt}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.tennisCourt = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Volleyball</label>
+                        <input
+                            id="checkVolleyball"
+                            type="checkbox"
+                            label="Volleyball"
+                            value={userData.volleyballCourt}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.volleyballCourt = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Soccer</label>
+                        <input
+                            id="checkSoccer"
+                            type="checkbox"
+                            label="Soccer"
+                            value={userData.soccerField}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.soccerField = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Playground</label>
+                        <input
+                            id="checkPlayground"
+                            type="checkbox"
+                            label="Playground"
+                            value={userData.playground}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.playground = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Swing-sets</label>
+                        <input
+                            id="checkSwings"
+                            type="checkbox"
+                            label="Volleyball"
+                            value={userData.swingSet}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.swingSet = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Parking Lot</label>
+                        <input
+                            id="checkParking"
+                            type="checkbox"
+                            label="Parking Lot"
+                            value={userData.parkingLot}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.parkingLot = event.target.checked
                                     update(copy)
                                 }
                             }>
@@ -97,103 +243,3 @@ export const NewParkForm = () => {
         </form>
     )
 }
-
-
-
-{/* <style>
-    .checkbox-wrapper-5 .check {
-        --size: 40px;
-
-    position: relative;
-    background: linear-gradient(90deg, #f19af3, #f099b5);
-    line-height: 0;
-    perspective: 400px;
-    font-size: var(--size);
-  }
-
-    .checkbox-wrapper-5 .check input[type="checkbox"],
-    .checkbox-wrapper-5 .check label,
-    .checkbox-wrapper-5 .check label::before,
-    .checkbox-wrapper-5 .check label::after,
-    .checkbox-wrapper-5 .check {
-        appearance: none;
-    display: inline-block;
-    border-radius: var(--size);
-    border: 0;
-    transition: .35s ease-in-out;
-    box-sizing: border-box;
-    cursor: pointer;
-  }
-
-    .checkbox-wrapper-5 .check label {
-        width: calc(2.2 * var(--size));
-    height: var(--size);
-    background: #d7d7d7;
-    overflow: hidden;
-  }
-
-    .checkbox-wrapper-5 .check input[type="checkbox"] {
-        position: absolute;
-    z-index: 1;
-    width: calc(.8 * var(--size));
-    height: calc(.8 * var(--size));
-    top: calc(.1 * var(--size));
-    left: calc(.1 * var(--size));
-    background: linear-gradient(45deg, #dedede, #ffffff);
-    box-shadow: 0 6px 7px rgba(0,0,0,0.3);
-    outline: none;
-    margin: 0;
-  }
-
-    .checkbox-wrapper-5 .check input[type="checkbox"]:checked {
-        left: calc(1.3 * var(--size));
-  }
-
-    .checkbox-wrapper-5 .check input[type="checkbox"]:checked + label {
-        background: transparent;
-  }
-
-    .checkbox-wrapper-5 .check label::before,
-    .checkbox-wrapper-5 .check label::after {
-        content: "· ·";
-    position: absolute;
-    overflow: hidden;
-    left: calc(.15 * var(--size));
-    top: calc(.5 * var(--size));
-    height: var(--size);
-    letter-spacing: calc(-0.04 * var(--size));
-    color: #9b9b9b;
-    font-family: "Times New Roman", serif;
-    z-index: 2;
-    font-size: calc(.6 * var(--size));
-    border-radius: 0;
-    transform-origin: 0 0 calc(-0.5 * var(--size));
-    backface-visibility: hidden;
-  }
-
-    .checkbox-wrapper-5 .check label::after {
-        content: "●";
-    top: calc(.65 * var(--size));
-    left: calc(.2 * var(--size));
-    height: calc(.1 * var(--size));
-    width: calc(.35 * var(--size));
-    font-size: calc(.2 * var(--size));
-    transform-origin: 0 0 calc(-0.4 * var(--size));
-  }
-
-    .checkbox-wrapper-5 .check input[type="checkbox"]:checked + label::before,
-    .checkbox-wrapper-5 .check input[type="checkbox"]:checked + label::after {
-        left: calc(1.55 * var(--size));
-    top: calc(.4 * var(--size));
-    line-height: calc(.1 * var(--size));
-    transform: rotateY(360deg);
-  }
-
-    .checkbox-wrapper-5 .check input[type="checkbox"]:checked + label::after {
-        height: calc(.16 * var(--size));
-    top: calc(.55 * var(--size));
-    left: calc(1.6 * var(--size));
-    font-size: calc(.6 * var(--size));
-    line-height: 0;
-  }
-</style> */}

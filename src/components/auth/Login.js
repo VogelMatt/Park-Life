@@ -21,7 +21,7 @@ export const Login = () => {
                         email: user.email
                     }))
 
-                    navigate("/")
+                    navigate("/user-parks")
                 }
                 else {
                     window.alert("Invalid login")

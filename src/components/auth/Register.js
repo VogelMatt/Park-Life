@@ -5,7 +5,7 @@ import "./Login.css"
 export const Register = (props) => {
     const [user, setUser] = useState({
         email: "",
-        fullName: ""
+        name: ""
     })
     let navigate = useNavigate()
 
@@ -21,10 +21,12 @@ export const Register = (props) => {
             .then(createdUser => {
                 if (createdUser.hasOwnProperty("id")) {
                     localStorage.setItem("parklife_user", JSON.stringify({
-                        id: createdUser.id
+                        id: createdUser.id,
+                        name: createdUser.name,
+                        email: createdUser.email
                     }))
 
-                    navigate("/")
+                    navigate("/user-parks")
                 }
             })
     }
@@ -56,9 +58,9 @@ export const Register = (props) => {
             <form className="form--login" onSubmit={handleRegister}>
                 <h1 className="h3 mb-3 font-weight-normal">Please Register for Park Life</h1>
                 <fieldset>
-                    <label htmlFor="fullName"> Full Name </label>
+                    <label htmlFor="name"> Full Name </label>
                     <input onChange={updateUser}
-                           type="text" id="fullName" className="form-control"
+                           type="text" id="name" className="form-control"
                            placeholder="Enter your name" required autoFocus />
                 </fieldset>
                 <fieldset>

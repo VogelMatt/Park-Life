@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.park-image {
+  max-height: 100px;
+  max-width: 100px;
+}

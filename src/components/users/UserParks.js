@@ -1,60 +1,82 @@
 import { useEffect, useState } from "react"
-import { basketball, parking, playground, soccer, swingset, tennis, Volleyball } from "../parks/AllParksList"
+import { useNavigate } from "react-router-dom"
+import { basketball, parking, playground, soccer, swingset, tennis, volleyball } from "../parks/AllParksList"
 
 export const UserParks = () => {
-        
-        const [parks, setParks] = useState([])
-        const [filteredParks, setFilteredParks] = useState([])
-        const currentUser = 5
-        // this will be the parklife user once login is not scuffed
+
+    const [parks, setParks] = useState([])
+    const [filteredParks, setFilteredParks] = useState([])
+
+    const navigate = useNavigate();
+    const localParkUser = localStorage.getItem("parklife_user")
+    const parkUserObject = JSON.parse(localParkUser)
+
+    
 
 
-        useEffect(
-            () => {
-                fetch(`http://localhost:8088/parks`)
-                    .then(res => res.json())
-                    .then((allparksArray) => {
-                        setParks(allparksArray)
-                    })
-            },
-            []
-        )
-        
-        useEffect(
-            ()=>{
-              const filter = parks.filter(park => park.createdUserId === currentUser)
-              setFilteredParks(filter)  
-                
-            },[parks])
-        
-        
-        
-        return <>
-            <h2>My Parks</h2>
-            <article className="userParks">
-                {
-                    filteredParks.map(
-                        (park) => {
-                            return <section key={park.id} className="userCreatedParks">
-                                 <header>
-                                    <article>
 
-                                        <div>
-                                            <h4>
-                                            {park.name}  
-                                            </h4>
-                                            {park.location}                                    
-                                        </div>
-                                        <h5>
-                                        Park Amenities:
-                                        </h5>
-                                        <div>
-                                            {basketball(park)}
+    const currentUserId = parkUserObject.id
+    const deletePark = (id) => {
+        fetch(`http://localhost:8088/parks/${id}`, {
+            method: "DELETE"
+        })
+        .then(navigate(0))
+            
+    }
+
+
+    useEffect(
+        () => {
+            fetch(`http://localhost:8088/parks`)
+                .then(res => res.json())
+                .then((allparksArray) => {
+                    setParks(allparksArray)
+                })
+        },
+        []
+    )
+
+    useEffect(
+        () => {
+            const filter = parks.filter(park => park.userId === currentUserId)
+            setFilteredParks(filter)
+
+        }, [parks])
+
+
+
+    return <>
+        <h2>{parkUserObject.name}'s Parks</h2>
+        <button onClick={() => navigate("/park-form")}>
+            Create New Park
+        </button>
+        <article className="userParks">
+            {
+                filteredParks.map(
+                    (park) => {
+                        return <section key={park.id} className="userCreatedParks">
+                            <header>
+                                <article>
+
+                                    <h4>
+                                        {park.name}
+                                    </h4>
+                                    <img src={`${park.imageUrl}`} className="park-image" />
+                                    <div>
+                                        {park.location}
+                                    </div>
+                                </article>
+                                <h5>
+                                    Park Amenities:
+                                </h5>
+                                <article>
+                                    <div>
+                                        {basketball(park)}
                                         <div>
                                             {tennis(park)}
                                         </div>
                                         <div>
-                                            {Volleyball(park)}
+                                            {volleyball(park)}
                                         </div>
                                         <div>
                                             {playground(park)}
@@ -69,19 +91,20 @@ export const UserParks = () => {
                                             {parking(park)}
                                         </div>
 
-                                            <br>
-                                            </br>                    
-                                        </div>
-                                    </article>
+                                        <br>
+                                        </br>
+                                    </div>
+                                </article>
                             </header>
+                            <button className="delete-button" onClick={() => deletePark(park.id)}>Delete Park</button>
                         </section>
-                        }
-                    )
-                }
+                    }
+                )
+            }
 
 
-            </article>
-        
-        
-        </>
+        </article>
+
+
+    </>
 }

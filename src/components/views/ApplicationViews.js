@@ -1,7 +1,7 @@
 import { Outlet, Route, Routes } from "react-router-dom"
 import { AllParksList } from "../parks/AllParksList"
-import { UserPage } from "../users/UserPage"
-
+import { NewParkForm } from "../users/UserNewPark"
+import { UserParks } from "../users/UserParks"
 
 export const ApplicationViews = () => {
     return (
@@ -19,7 +19,10 @@ export const ApplicationViews = () => {
 
 
 
-                <Route path="UserPage" element={<UserPage />} />
+                <Route path="user-parks" element={<UserParks/>} />
+
+                <Route path="park-form" element={<NewParkForm/>} />
+
             </Route>
         </Routes>
     )
