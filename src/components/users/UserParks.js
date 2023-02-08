@@ -10,7 +10,7 @@ export const UserParks = () => {
     const navigate = useNavigate();
     const localParkUser = localStorage.getItem("parklife_user")
     const parkUserObject = JSON.parse(localParkUser)
-
+    
     
 
 
