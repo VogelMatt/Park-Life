@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
+
+
 export const basketball = (park) => {
     if (park.basketballCourt === true) {
         return "Basketball Hoops"
@@ -33,21 +35,67 @@ export const parking = (park) => {
         return "Parking Lot"
 }
 
+
 export const AllParksList = () => {
     const [allparks, setAllParks] = useState([])
     const navigate = useNavigate();
 
+    const localParkUser = localStorage.getItem("parklife_user")
+    const loggedInUser = JSON.parse(localParkUser)
+
+    const fetchAllParks = () => {
+        fetch(`http://localhost:8088/parks?_embed=parkInterests`)
+            .then(res => res.json())
+            .then((allparksArray) => {
+                setAllParks(allparksArray)
+            })
+    }
+
 
     useEffect(
         () => {
-            fetch(`http://localhost:8088/parks`)
-                .then(res => res.json())
-                .then((allparksArray) => {
-                    setAllParks(allparksArray)
-                })
+            fetchAllParks()
         },
         []
     )
+
+
+    const likeParkClick = (parkId, userId) => {
+        // event.preventDefault()
+
+        const newParkInterestObject = {
+            parkId: parkId,
+            userId: userId
+        }
+
+
+        return fetch(`http://localhost:8088/parkInterests`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newParkInterestObject)
+        })
+            .then(fetchAllParks())
+
+    }
+
+    const deleteParkClick = (id) => {
+
+
+        return fetch(`http://localhost:8088/parkInterests/${id}`, {
+            method: "DELETE",
+        })
+            .then(fetchAllParks())
+    }
+
+
+
+
+
+
+
+
     return <>
         <h2>AllParks</h2>
 
@@ -72,12 +120,39 @@ export const AllParksList = () => {
                                     <h4>
                                         {park.name}
                                     </h4>
+                                    <div>
+                                        {park.parkInterests.length} people like this park
+                                    </div>
+                                    <div>
+                                        {
+                                            loggedInUser && park.parkInterests.some(pi => pi.userId === loggedInUser.id) ?
+                                                <div onClick={() => {
+                                                    let parkInterestObjToDelete = park.parkInterests.find(pi => pi.userId === loggedInUser.id)
+                                                    deleteParkClick(parkInterestObjToDelete.id)
+
+                                                }}>
+                                                    <i className="fa-solid fa-thumbs-up like-btn-active" ></i>
+                                                </div>
+                                                :
+                                                ""
+                                        }
+                                    </div>
+                                    <div>
+                                        {
+                                            loggedInUser && !park.parkInterests.some(pi => pi.userId === loggedInUser.id) ?
+                                                <div onClick={() => { likeParkClick(park.id, loggedInUser.id) }}>
+                                                    <i className="fa-regular fa-thumbs-up like-btn-inactive" ></i>
+                                                </div>
+                                                :
+                                                ""
+                                        }
+                                    </div>
                                     <img src={`${park.imageUrl}`} className="park-image" />
                                     <div>
                                         {park.location}
                                     </div>
-
                                 </article>
+
                                 <h5>
                                     Park Amenities:
                                 </h5>
