@@ -43,10 +43,15 @@ export const UserParks = () => {
 
         }, [parks])
 
+        const knope = require('knope')
 
+
+        let compliment = knope.getCompliment(parkUserObject.name)
+
+       
 
     return <>
-        <h2>{parkUserObject.name}'s Parks</h2>
+        <h2>{compliment} Here are your Parks</h2>
         <button onClick={() => navigate("/park-form")}>
             Create New Park
         </button>

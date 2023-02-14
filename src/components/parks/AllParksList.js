@@ -2,29 +2,53 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Collapse from '@mui/material/Collapse';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 
+
+
+
+
+<i class="fa-solid fa-basketball"></i>
 
 export const basketball = (park) => {
     if (park.basketballCourt === true) {
-        return "Basketball Hoops"
+        return <i class="fa-solid fa-basketball"></i>
     }
 }
 export const tennis = (park) => {
     if (park.tennisCourt === true) {
-        return "Tennis Courts"
+        return <span class="material-symbols-outlined">
+            sports_tennis
+        </span>
     }
 }
 export const volleyball = (park) => {
     if (park.volleyballCourt === true)
-        return "Volleyball Courts"
+        return <i class="fa-solid fa-volleyball"></i>
 }
 export const playground = (park) => {
     if (park.playground === true)
-        return "Playground"
+        return <i class="fa-solid fa-people-roof"></i>
 }
 export const soccer = (park) => {
     if (park.soccerField === true)
-        return "Soccer Field"
+        return <i class="fa-solid fa-futbol"></i>
 }
 export const swingset = (park) => {
     if (park.swingSet === true)
@@ -32,19 +56,36 @@ export const swingset = (park) => {
 }
 export const parking = (park) => {
     if (park.parkingLot === true)
-        return "Parking Lot"
+        return <i class="fa-solid fa-square-parking"></i>
 }
+
+const ExpandMore = styled((props) => {
+    const { expand, ...other } = props;
+    return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest,
+    }),
+}));
 
 
 export const AllParksList = () => {
     const [allparks, setAllParks] = useState([])
     const navigate = useNavigate();
 
+
+    const [expanded, setExpanded] = React.useState(false);
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
+
     const localParkUser = localStorage.getItem("parklife_user")
     const loggedInUser = JSON.parse(localParkUser)
 
     const fetchAllParks = () => {
-        fetch(`http://localhost:8088/parks?_embed=parkInterests`)
+        fetch(`http://localhost:8088/parks?_embed=parkInterests&_expand=user`)
             .then(res => res.json())
             .then((allparksArray) => {
                 setAllParks(allparksArray)
@@ -97,7 +138,7 @@ export const AllParksList = () => {
 
 
     return <>
-        <h2>AllParks</h2>
+        <h2>Parks</h2>
 
         <button id="new-park" onClick={() => {
             if (localStorage.getItem("parklife_user")) {
@@ -113,74 +154,105 @@ export const AllParksList = () => {
             {
                 allparks.map(
                     (park) => {
-                        console.log(park)
                         return <section key={park.id} className="parks">
-                            <header>
-                                <article>
-                                    <h4>
-                                        {park.name}
-                                    </h4>
-                                    <div>
-                                        {park.parkInterests.length} people like this park
-                                    </div>
-                                    <div>
-                                        {
-                                            loggedInUser && park.parkInterests.some(pi => pi.userId === loggedInUser.id) ?
-                                                <div onClick={() => {
-                                                    let parkInterestObjToDelete = park.parkInterests.find(pi => pi.userId === loggedInUser.id)
-                                                    deleteParkClick(parkInterestObjToDelete.id)
+                            <Card sx={{ maxWidth: 345 }}>
+                                <CardHeader
+                                    // avatar={
+                                    //     <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                                    //         {park.user.name}
+                                    //     </Avatar>
+                                    // }
+                                    // action={
+                                    //     <IconButton aria-label="settings">
+                                    //         <MoreVertIcon />
+                                    //     </IconButton>
+                                    // }
+                                    title={park.name}
+                                    subheader={park.location}
+                                />
+                                <CardMedia
+                                    component="img"
+                                    height="194"
+                                    image={park.imageUrl}
+                                    alt="Park Image"
+                                />
+                                <CardContent>
+                                    <Typography variant="body2" color="text.secondary">
+                                        {park.description}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions disableSpacing>
+                                    {
+                                        loggedInUser && park.parkInterests.some(pi => pi.userId === loggedInUser.id) ?
+                                            <IconButton onClick={() => {
+                                                let parkInterestObjToDelete = park.parkInterests.find(pi => pi.userId === loggedInUser.id)
+                                                setInterval(deleteParkClick(parkInterestObjToDelete.id), 500 ) 
 
-                                                }}>
-                                                    <i className="fa-solid fa-thumbs-up like-btn-active" ></i>
-                                                </div>
-                                                :
-                                                ""
-                                        }
-                                    </div>
-                                    <div>
-                                        {
+                                            }}>
+
+                                                <FavoriteIcon style={{ color: "green" }} />
+                                            </IconButton>
+
+                                            :
+                                            ""
+                                    }
+                                    {
                                             loggedInUser && !park.parkInterests.some(pi => pi.userId === loggedInUser.id) ?
-                                                <div onClick={() => { likeParkClick(park.id, loggedInUser.id) }}>
-                                                    <i className="fa-regular fa-thumbs-up like-btn-inactive" ></i>
-                                                </div>
+                                                <IconButton onClick={() => { 
+                                                    setInterval(likeParkClick(park.id, loggedInUser.id), 500 ) 
+                                                    }}>
+                                                    <FavoriteIcon/>
+                                                    </IconButton>
                                                 :
                                                 ""
-                                        }
-                                    </div>
-                                    <img src={`${park.imageUrl}`} className="park-image" />
-                                    <div>
-                                        {park.location}
-                                    </div>
-                                </article>
+                                    }
+                                    {
+                                            !loggedInUser ?
+                                                <IconButton>
+                                                    <FavoriteBorderOutlinedIcon style={{ color: "green" }}/>
+                                                    </IconButton>
+                                                :
+                                                ""
+                                    }
+                                    {park.parkInterests.length}
+                                    <ExpandMore
+                                        expand={expanded}
+                                        onClick={handleExpandClick}
+                                        aria-expanded={expanded}
+                                        aria-label="show more"
+                                    >
+                                        <ExpandMoreIcon />
+                                    </ExpandMore>
+                                </CardActions>
+                                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                                    <CardContent>
+                                        <article>
+                                            {basketball(park)}
+                                            <article>
+                                                {tennis(park)}
+                                            </article>
+                                            <article>
+                                                {volleyball(park)}
+                                            </article>
+                                            <article>
+                                                {playground(park)}
+                                            </article>
+                                            <article>
+                                                {soccer(park)}
+                                            </article>
+                                            <article>
+                                                {swingset(park)}
+                                            </article>
+                                            <article>
+                                                {parking(park)}
+                                            </article>
+                                        </article>
+                                    </CardContent>
+                                </Collapse>
+                            </Card>
 
-                                <h5>
-                                    Park Amenities:
-                                </h5>
-                                <article>
-                                    {basketball(park)}
-                                    <article>
-                                        {tennis(park)}
-                                    </article>
-                                    <article>
-                                        {volleyball(park)}
-                                    </article>
-                                    <article>
-                                        {playground(park)}
-                                    </article>
-                                    <article>
-                                        {soccer(park)}
-                                    </article>
-                                    <article>
-                                        {swingset(park)}
-                                    </article>
-                                    <article>
-                                        {parking(park)}
-                                    </article>
 
-                                    <br>
-                                    </br>
-                                </article>
-                            </header>
+
                         </section>
                     }
                 )
