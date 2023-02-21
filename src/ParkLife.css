@@ -14,11 +14,13 @@ textarea {
 
 body {
     padding: 0 3rem;
+    background-color: rgb(66, 93, 100)
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: "Patua One", serif;
   letter-spacing: 2px;
+  color: antiquewhite;
 }
 
 p {
@@ -27,5 +29,11 @@ p {
 
 .title--main {
   margin-block-end: 0;
+}
+
+#root {
+  
+  margin: 0px -50px;
+  
 }
 

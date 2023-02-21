@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { ParkLife } from './ParkLife';
 import { BrowserRouter } from "react-router-dom";
 import './index.css'
+import './cards.css'
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

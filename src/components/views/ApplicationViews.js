@@ -1,5 +1,6 @@
 import { Outlet, Route, Routes } from "react-router-dom"
 import { AllParksList } from "../parks/AllParksList"
+import { ParkContainer } from "../search/ParkContainer"
 import { NewParkForm } from "../users/UserNewPark"
 import { UserParks } from "../users/UserParks"
 
@@ -8,14 +9,14 @@ export const ApplicationViews = () => {
         <Routes>
             <Route path="/" element={
                 <>
-                    <h1>Park Life</h1>
-                    <div>For When You Want To Park Your Life</div>
+                    <br></br>
+                    {/* <h3>When You Want To Park Your Life</h3> */}
 
                     <Outlet />
                 </>
             }>
                 
-                <Route path="/" element={<AllParksList />} />
+                <Route path="/" element={<ParkContainer/>} />
 
 
 

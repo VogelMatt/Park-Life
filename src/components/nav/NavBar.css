@@ -1,15 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
 .navbar {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: left;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: left;
 }
 
 .navbar__item {
-    flex-basis: 20%;
-    list-style-type: none;
+  flex-basis: 20%;
+  list-style-type: none;
 }
-
+.navbar-entire {
+    position: fixed;
+    width: 100vw;
+}
 .navbar__logout {
-    margin-left: auto;
+  margin-left: auto;
+}
+.MuiToolbar-root {
+  background-color: rgb(92, 143, 108);
 }
 
+.parkLogoFont {
+  font-family: "Pacifico", cursive;
+  display: flex;
+  justify-content: center;
+  color: rgb(235, 206, 174);
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.63);
+  font-size: larger;
+  margin-right: 5.3rem;
+}
+.searchBarPosition {
+  position: fixed;
+  top: 23px;
+  right: 11px;
+  background: transparent;
+  border: none;
+  
+}
+
+
+
+.change::-webkit-input-placeholder {
+  /* WebKit, Blink, Edge */
+  color: antiquewhite;
+}
+.change:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: antiquewhite;
+  opacity: 1;
+}
+.change::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: antiquewhite;
+  opacity: 1;
+}
+.change:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: antiquewhite;
+}
+/* ::placeholder {
+  color: antiquewhite;
+} */

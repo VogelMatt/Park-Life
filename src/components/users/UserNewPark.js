@@ -1,5 +1,9 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import React from "react";
+import "./UserNewPark.css"
+
+
 
 
 export const NewParkForm = () => {
@@ -11,9 +15,9 @@ export const NewParkForm = () => {
         basketballCourt: false,
         tennisCourt: false,
         volleyballCourt: false,
+        frisbee: false,
         playground: false,
         soccerField: false,
-        swingSet: false,
         parkingLot: false,
         imageUrl: ''
 
@@ -44,10 +48,17 @@ export const NewParkForm = () => {
             })
     }
 
-    return (
 
+    const knope = require('knope')
+
+
+    let compliment = knope.getCompliment(parkUserObject.name, 2)
+
+
+    return (
+        <div className="pageWrapper">
         <form className="productForm">
-            <h2 className="productForm__title">New Park</h2>
+            <h2 className="productForm__title">{compliment} <br></br> <br></br> Add a park here...if you're cool.</h2>
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="name">Name:</label>
@@ -123,144 +134,169 @@ export const NewParkForm = () => {
                     />
                 </div>
             </fieldset>
-            <div className="container">
-                <div className="check">
-                    <label htmlFor="attributes">Basketball</label>
-                    <input
-                        id="checkBasketball"
-                        type="checkbox"
-                        value={userData.basketballCourt}
-                        onChange={
-                            (event) => {
-                                const copy = { ...userData }
-                                copy.basketballCourt = event.target.checked
-                                update(copy)
-                            }
-                        }>
+            <div className="checkWrapper">
 
-                    </input>
+
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Basketball</label>
+                        <input
+                            id="checkBasketball"
+                            type="checkbox"
+                            value={userData.basketballCourt}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.basketballCourt = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Tennis</label>
+                        <input
+                            id="CheckTennis"
+                            type="checkbox"
+                            label="Tennis"
+                            value={userData.tennisCourt}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.tennisCourt = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Volleyball</label>
+                        <input
+                            id="checkVolleyball"
+                            type="checkbox"
+                            label="Volleyball"
+                            value={userData.volleyballCourt}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.volleyballCourt = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Frisbee</label>
+                        <input
+                            id="checkFrisbee"
+                            type="checkbox"
+                            label="Frisbee"
+                            value={userData.frisbee}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.frisbee = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Soccer</label>
+                        <input
+                            id="checkSoccer"
+                            type="checkbox"
+                            label="Soccer"
+                            value={userData.soccerField}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.soccerField = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Playground</label>
+                        <input
+                            id="checkPlayground"
+                            type="checkbox"
+                            label="Playground"
+                            value={userData.playground}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.playground = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Lights</label>
+                        <input
+                            id="checkSwings"
+                            type="checkbox"
+                            label="Volleyball"
+                            value={userData.lights}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.lights = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
+                        <label htmlFor="attributes">Parking Lot</label>
+                        <input
+                            id="checkParking"
+                            type="checkbox"
+                            label="Parking Lot"
+                            value={userData.parkingLot}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.parkingLot = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
                 </div>
             </div>
-            <div className="container">
-                <div className="check">
-                    <label htmlFor="attributes">Tennis</label>
-                    <input
-                        id="CheckTennis"
-                        type="checkbox"
-                        label="Tennis"
-                        value={userData.tennisCourt}
-                        onChange={
-                            (event) => {
-                                const copy = { ...userData }
-                                copy.tennisCourt = event.target.checked
-                                update(copy)
-                            }
-                        }>
-
-                    </input>
-                </div>
-            </div>
-            <div className="container">
-                <div className="check">
-                    <label htmlFor="attributes">Volleyball</label>
-                    <input
-                        id="checkVolleyball"
-                        type="checkbox"
-                        label="Volleyball"
-                        value={userData.volleyballCourt}
-                        onChange={
-                            (event) => {
-                                const copy = { ...userData }
-                                copy.volleyballCourt = event.target.checked
-                                update(copy)
-                            }
-                        }>
-
-                    </input>
-                </div>
-            </div>
-            <div className="container">
-                <div className="check">
-                    <label htmlFor="attributes">Soccer</label>
-                    <input
-                        id="checkSoccer"
-                        type="checkbox"
-                        label="Soccer"
-                        value={userData.soccerField}
-                        onChange={
-                            (event) => {
-                                const copy = { ...userData }
-                                copy.soccerField = event.target.checked
-                                update(copy)
-                            }
-                        }>
-
-                    </input>
-                </div>
-            </div>
-            <div className="container">
-                <div className="check">
-                    <label htmlFor="attributes">Playground</label>
-                    <input
-                        id="checkPlayground"
-                        type="checkbox"
-                        label="Playground"
-                        value={userData.playground}
-                        onChange={
-                            (event) => {
-                                const copy = { ...userData }
-                                copy.playground = event.target.checked
-                                update(copy)
-                            }
-                        }>
-
-                    </input>
-                </div>
-            </div>
-            <div className="container">
-                <div className="check">
-                    <label htmlFor="attributes">Swing-sets</label>
-                    <input
-                        id="checkSwings"
-                        type="checkbox"
-                        label="Volleyball"
-                        value={userData.swingSet}
-                        onChange={
-                            (event) => {
-                                const copy = { ...userData }
-                                copy.swingSet = event.target.checked
-                                update(copy)
-                            }
-                        }>
-
-                    </input>
-                </div>
-            </div>
-            <div className="container">
-                <div className="check">
-                    <label htmlFor="attributes">Parking Lot</label>
-                    <input
-                        id="checkParking"
-                        type="checkbox"
-                        label="Parking Lot"
-                        value={userData.parkingLot}
-                        onChange={
-                            (event) => {
-                                const copy = { ...userData }
-                                copy.parkingLot = event.target.checked
-                                update(copy)
-                            }
-                        }>
-
-                    </input>
-                </div>
-            </div>
-
+            <div className="button-centered">
             <button
                 onClick={(clickEvent) => handleSaveButtonClick(clickEvent)}
-                className="btn btn-primary">
+                className="btn btn-primary button-primary">
                 Submit Park
             </button>
+            </div>
         </form>
+        </div>
     )
 }
