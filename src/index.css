@@ -1,25 +1,41 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-.park-image {
-  max-height: 100px;
-  max-width: 100px;
+
+
+#root > .pageWrapper {
+  padding-top: 4rem;
 }
-.like-btn-active {
-  font-size: 1.5rem;
-  color: green;
+
+
+.button-primary {
+  color: antiquewhite;
+    background-color: transparent;
+    border: 2px solid antiquewhite;
+    margin: 1rem;
+    padding: 0.4rem 1rem;
+    border-radius: 5px;
 }
-.like-btn-inactive {
-  font-size: 1.5rem;
-  opacity: .7;
+.button-secondary {
+  color: antiquewhite;
+    background-color: rgb(66, 93, 100);
+    border: 2px solid rgb(66, 93, 100);
+    margin: 1rem;
+    padding: 0.4rem 1rem;
+    border-radius: 5px;
+}
+.button-centered {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem
 }

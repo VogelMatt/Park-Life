@@ -2,62 +2,141 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
+// import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Collapse from '@mui/material/Collapse';
 
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LightIcon from '@mui/icons-material/Light';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+
+
+
+
+
+<i className="fa-solid fa-basketball"></i>
 
 export const basketball = (park) => {
     if (park.basketballCourt === true) {
-        return "Basketball Hoops"
+        return <i className="fa-solid fa-basketball"> basketball</i>
     }
 }
 export const tennis = (park) => {
     if (park.tennisCourt === true) {
-        return "Tennis Courts"
+        return <i className="fa-solid">
+            <span className="material-symbols-outlined">
+                sports_tennis
+            </span>
+            Tennis
+        </i>
     }
 }
 export const volleyball = (park) => {
     if (park.volleyballCourt === true)
-        return "Volleyball Courts"
+        return <i className="fa-solid fa-volleyball"> volleyball</i>
+}
+export const frisbee = (park) => {
+    if (park.frisbee === true)
+        return <i className="fa-solid">
+            <span className="material-symbols-outlined">
+                album
+            </span>
+            Frisbee
+        </i>
 }
 export const playground = (park) => {
     if (park.playground === true)
-        return "Playground"
+        return <i className="fa-solid fa-people-roof"> playground</i>
 }
 export const soccer = (park) => {
     if (park.soccerField === true)
-        return "Soccer Field"
+        return <i className="fa-solid fa-futbol"> soccer</i>
 }
-export const swingset = (park) => {
-    if (park.swingSet === true)
-        return "Swing-sets"
+export const lights = (park) => {
+    if (park.lights === true)
+        return <i className="fa-solid">
+            <span className="material-symbols-outlined">
+                light
+            </span>
+            Lights
+        </i>
 }
 export const parking = (park) => {
     if (park.parkingLot === true)
-        return "Parking Lot"
+        return <i className="fa-solid fa-square-parking"> parking</i>
 }
 
+const ExpandMore = styled((props) => {
+    const { expand, ...other } = props;
+    return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest,
+    }),
+}));
 
-export const AllParksList = () => {
+
+export const AllParksList = ({ searchTermState }) => {
     const [allparks, setAllParks] = useState([])
     const navigate = useNavigate();
+    const [filteredParks, setFilteredParks] = useState([])
+
+    const [expanded, setExpanded] = useState(false);
+    const [selectedId, setSelectedId] = useState(-1);
+    const handleExpandClick = (id) => {
+        setExpanded(!expanded)
+
+        if (selectedId === id) {
+            setSelectedId(-1);
+        } else {
+            setSelectedId(id)
+
+        }
+    };
 
     const localParkUser = localStorage.getItem("parklife_user")
     const loggedInUser = JSON.parse(localParkUser)
 
     const fetchAllParks = () => {
-        fetch(`http://localhost:8088/parks?_embed=parkInterests`)
+        fetch(`http://localhost:8088/parks?_embed=parkInterests&_expand=user`)
             .then(res => res.json())
             .then((allparksArray) => {
                 setAllParks(allparksArray)
+                setFilteredParks(allparksArray)
             })
     }
-
-
     useEffect(
         () => {
             fetchAllParks()
         },
         []
     )
+
+    useEffect(
+        () => {
+            // if(searchTermState.length > 0) {                
+            const searchedParks = allparks.filter(park => park.name.toLowerCase().startsWith(searchTermState))
+            setFilteredParks(searchedParks)
+            // } else {
+            //     setFilteredParks(allparks)                
+            // }
+        },
+        [searchTermState]
+    )
+
+
 
 
     const likeParkClick = (parkId, userId) => {
@@ -97,95 +176,127 @@ export const AllParksList = () => {
 
 
     return <>
-        <h2>AllParks</h2>
 
-        <button id="new-park" onClick={() => {
-            if (localStorage.getItem("parklife_user")) {
-                navigate("/park-form")
-            } else {
-                navigate("/login")
-            }
+        <div className="pageWrapper">
+            <div className="button-centered" style={{marginBottom: '2rem' }}>
 
-        }}>
-            Create New Park
-        </button>
-        <article className="allparks">
-            {
-                allparks.map(
-                    (park) => {
-                        console.log(park)
-                        return <section key={park.id} className="parks">
-                            <header>
-                                <article>
-                                    <h4>
-                                        {park.name}
-                                    </h4>
-                                    <div>
-                                        {park.parkInterests.length} people like this park
-                                    </div>
-                                    <div>
+                <button className="button-primary" id="new-park" onClick={() => {
+                    if (localStorage.getItem("parklife_user")) {
+                        navigate("/park-form")
+                    } else {
+                        navigate("/login")
+                    }
+
+                }}>
+                    Create New Park
+                </button>
+            </div>
+            <article className="allparks">
+                {
+                    filteredParks.map(
+                        (park) => {
+                            return <section key={park.id} className="parks">
+                                <Card sx={{ maxWidth: 345 }}>
+                                    <CardHeader
+                                        title={park.name}
+                                        subheader={park.location}
+                                    />
+                                    <CardMedia
+                                        component="img"
+                                        height="194"
+                                        image={park.imageUrl}
+                                        alt="Park Image"
+                                    />
+                                    <CardContent className="cardContent">
+                                        <Typography variant="body2" color="text.secondary">
+                                            {park.description}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions disableSpacing>
                                         {
                                             loggedInUser && park.parkInterests.some(pi => pi.userId === loggedInUser.id) ?
-                                                <div onClick={() => {
+                                                <IconButton onClick={() => {
                                                     let parkInterestObjToDelete = park.parkInterests.find(pi => pi.userId === loggedInUser.id)
                                                     deleteParkClick(parkInterestObjToDelete.id)
 
                                                 }}>
-                                                    <i className="fa-solid fa-thumbs-up like-btn-active" ></i>
-                                                </div>
+
+                                                    <FavoriteIcon style={{ color: "green" }} />
+                                                </IconButton>
+
                                                 :
                                                 ""
                                         }
-                                    </div>
-                                    <div>
                                         {
                                             loggedInUser && !park.parkInterests.some(pi => pi.userId === loggedInUser.id) ?
-                                                <div onClick={() => { likeParkClick(park.id, loggedInUser.id) }}>
-                                                    <i className="fa-regular fa-thumbs-up like-btn-inactive" ></i>
-                                                </div>
+                                                <IconButton onClick={() => {
+                                                    likeParkClick(park.id, loggedInUser.id)
+                                                }}>
+                                                    <FavoriteIcon />
+                                                </IconButton>
                                                 :
                                                 ""
                                         }
-                                    </div>
-                                    <img src={`${park.imageUrl}`} className="park-image" />
-                                    <div>
-                                        {park.location}
-                                    </div>
-                                </article>
+                                        {
+                                            !loggedInUser ?
+                                                <IconButton>
+                                                    <FavoriteBorderOutlinedIcon style={{ color: "green" }} />
+                                                </IconButton>
+                                                :
+                                                ""
+                                        }
+                                        {park.parkInterests.length}
+                                        <ExpandMore
+                                            expand={expanded}
+                                            onClick={() => {
+                                                handleExpandClick(park.id)
+                                            }}
+                                            aria-expanded={expanded}
+                                            aria-label="show more"
+                                        >
+                                            <ExpandMoreIcon />
+                                        </ExpandMore>
+                                    </CardActions>
+                                    <Collapse in={park.id === selectedId ? true : false} timeout="auto" unmountOnExit>
+                                        <CardContent >
+                                            <div className="expandedInfo">
+                                                <article>
+                                                    {basketball(park)}
+                                                </article>
+                                                <article>
+                                                    {tennis(park)}
+                                                </article>
+                                                <article>
+                                                    {volleyball(park)}
+                                                </article>
+                                                <article>
+                                                    {playground(park)}
+                                                </article>
+                                                <article>
+                                                    {frisbee(park)}
+                                                </article>
+                                                <article>
+                                                    {soccer(park)}
+                                                </article>
+                                                <article>
+                                                    {lights(park)}
+                                                </article>
+                                                <article>
+                                                    {parking(park)}
+                                                </article>
+                                            </div>
+                                        </CardContent>
+                                    </Collapse>
+                                </Card>
 
-                                <h5>
-                                    Park Amenities:
-                                </h5>
-                                <article>
-                                    {basketball(park)}
-                                    <article>
-                                        {tennis(park)}
-                                    </article>
-                                    <article>
-                                        {volleyball(park)}
-                                    </article>
-                                    <article>
-                                        {playground(park)}
-                                    </article>
-                                    <article>
-                                        {soccer(park)}
-                                    </article>
-                                    <article>
-                                        {swingset(park)}
-                                    </article>
-                                    <article>
-                                        {parking(park)}
-                                    </article>
 
-                                    <br>
-                                    </br>
-                                </article>
-                            </header>
-                        </section>
-                    }
-                )
-            }
-        </article>
+
+                            </section>
+                        }
+                    )
+                }
+            </article>
+        </div>
     </>
 
 }

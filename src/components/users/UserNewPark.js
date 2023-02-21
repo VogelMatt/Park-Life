@@ -1,5 +1,9 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import React from "react";
+import "./UserNewPark.css"
+
+
 
 
 export const NewParkForm = () => {
@@ -7,12 +11,13 @@ export const NewParkForm = () => {
     const [userData, update] = useState({
         name: "",
         location: "",
+        description: "",
         basketballCourt: false,
         tennisCourt: false,
         volleyballCourt: false,
+        frisbee: false,
         playground: false,
         soccerField: false,
-        swingSet: false,
         parkingLot: false,
         imageUrl: ''
 
@@ -25,10 +30,10 @@ export const NewParkForm = () => {
     const handleSaveButtonClick = (event) => {
         event.preventDefault()
 
-        const newPark = {...userData};
+        const newPark = { ...userData };
         const userId = parkUserObject.id
         newPark.userId = userId
-        
+
 
         return fetch(`http://localhost:8088/parks`, {
             method: "POST",
@@ -43,10 +48,17 @@ export const NewParkForm = () => {
             })
     }
 
-    return (
 
+    const knope = require('knope')
+
+
+    let compliment = knope.getCompliment(parkUserObject.name, 2)
+
+
+    return (
+        <div className="pageWrapper">
         <form className="productForm">
-            <h2 className="productForm__title">New Park</h2>
+            <h2 className="productForm__title">{compliment} <br></br> <br></br> Add a park here...if you're cool.</h2>
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="name">Name:</label>
@@ -84,24 +96,47 @@ export const NewParkForm = () => {
                         }>
                     </input>
                 </div>
-                <fieldset>
-                    <div className="form-group">
-                        <label htmlFor="imgUrl">Image URL: </label>
-                        <input
-                            required
-                            type="text"
-                            id="imgUrl"
-                            className="form-control"
-                            placeholder="example.com"
-                            value={userData.imageUrl}
-                            onChange={(event) => {
+            </fieldset>
+            <fieldset>
+                <div className="form-group">
+                    <label htmlFor="description">Description</label>
+                    <input
+                        required type="text"
+                        id="parkDescription"
+                        className="form-control"
+                        placeholder="What do you like about this park?"
+                        value={userData.description}
+                        onChange={
+                            (event) => {
                                 const copy = { ...userData }
-                                copy.imageUrl = event.target.value
+                                copy.description = event.target.value
                                 update(copy)
-                            }}
-                        />
-                    </div>
-                </fieldset>
+                            }
+                        }>
+                    </input>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div className="form-group">
+                    <label htmlFor="imgUrl">Image URL: </label>
+                    <input
+                        required
+                        type="text"
+                        id="imgUrl"
+                        className="form-control"
+                        placeholder="example.com"
+                        value={userData.imageUrl}
+                        onChange={(event) => {
+                            const copy = { ...userData }
+                            copy.imageUrl = event.target.value
+                            update(copy)
+                        }}
+                    />
+                </div>
+            </fieldset>
+            <div className="checkWrapper">
+
+
                 <div className="container">
                     <div className="check">
                         <label htmlFor="attributes">Basketball</label>
@@ -160,6 +195,25 @@ export const NewParkForm = () => {
                 </div>
                 <div className="container">
                     <div className="check">
+                        <label htmlFor="attributes">Frisbee</label>
+                        <input
+                            id="checkFrisbee"
+                            type="checkbox"
+                            label="Frisbee"
+                            value={userData.frisbee}
+                            onChange={
+                                (event) => {
+                                    const copy = { ...userData }
+                                    copy.frisbee = event.target.checked
+                                    update(copy)
+                                }
+                            }>
+
+                        </input>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="check">
                         <label htmlFor="attributes">Soccer</label>
                         <input
                             id="checkSoccer"
@@ -198,16 +252,16 @@ export const NewParkForm = () => {
                 </div>
                 <div className="container">
                     <div className="check">
-                        <label htmlFor="attributes">Swing-sets</label>
+                        <label htmlFor="attributes">Lights</label>
                         <input
                             id="checkSwings"
                             type="checkbox"
                             label="Volleyball"
-                            value={userData.swingSet}
+                            value={userData.lights}
                             onChange={
                                 (event) => {
                                     const copy = { ...userData }
-                                    copy.swingSet = event.target.checked
+                                    copy.lights = event.target.checked
                                     update(copy)
                                 }
                             }>
@@ -234,12 +288,15 @@ export const NewParkForm = () => {
                         </input>
                     </div>
                 </div>
-            </fieldset>
+            </div>
+            <div className="button-centered">
             <button
                 onClick={(clickEvent) => handleSaveButtonClick(clickEvent)}
-                className="btn btn-primary">
+                className="btn btn-primary button-primary">
                 Submit Park
             </button>
+            </div>
         </form>
+        </div>
     )
 }

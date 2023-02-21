@@ -4,6 +4,7 @@ import { NavBar } from "./components/nav/NavBar"
 import { Login } from "./components/auth/Login"
 import { Register } from "./components/auth/Register"
 import "./ParkLife.css"
+import { ParkSearch } from "./components/search/ParkSearch"
 
 
 export const ParkLife = () => {
@@ -15,7 +16,10 @@ export const ParkLife = () => {
 			
 				<>
 					<NavBar />
-					<ApplicationViews />
+					
+					
+					<ApplicationViews/>
+					
 				</>
 			
 
